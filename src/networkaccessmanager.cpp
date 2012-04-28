@@ -39,7 +39,7 @@
 #include "config.h"
 #include "cookiejar.h"
 #include "networkaccessmanager.h"
-#include "terminal.h" //xxx
+//#include "terminal.h" //xxx
 
 static const char *toString(QNetworkAccessManager::Operation op)
 {
@@ -120,11 +120,14 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
     // segfaults in Qt 4.8: https://gist.github.com/1430393
     QByteArray url = req.url().toEncoded();
 
+    // If the url matches one of the ignore resource regular
+    // expressions, load about:blank instead to avoid fetching the
+    // actual resource.
     QList<QRegExp>::const_iterator iter = m_ignoreResourceRegexList.begin();
     QList<QRegExp>::const_iterator end_iter = m_ignoreResourceRegexList.end();
     for (; iter != end_iter; ++iter) {
         if ((*iter).indexIn(url) != -1) {
-            Terminal::instance()->cout(QString("(lih) regex >> %1").arg(url.data()));
+            //Terminal::instance()->cout(QString("(lih) regex >> %1").arg(url.data()));
             QUrl qurl("about:blank");
             req.setUrl(qurl);
             break;
@@ -132,7 +135,7 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
     }
 
 
-    Terminal::instance()->cout(QString("(lih)>> %1").arg(url.data())); //xxxx
+    //Terminal::instance()->cout(QString("(lih)>> %1").arg(url.data())); //xxxx
 
     // http://code.google.com/p/phantomjs/issues/detail?id=337
     if (op == QNetworkAccessManager::PostOperation) {
