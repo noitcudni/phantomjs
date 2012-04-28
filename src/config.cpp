@@ -152,6 +152,10 @@ void Config::processArgs(const QStringList &args)
             setWebSecurityEnabled(false);
             continue;
         }
+        if (arg.startsWith("--ignore-resources=")) {
+            setIgnoreResourceRegExp(arg.mid(arg.indexOf("=") + 1).trimmed());
+            continue;
+        }
         if (arg.startsWith("--")) {
             setUnknownOption(QString("Unknown option '%1'").arg(arg));
             return;
@@ -358,6 +362,21 @@ void Config::setScriptArgs(const QStringList &value)
     QStringListIterator it(value);
     while (it.hasNext()) {
         m_scriptArgs.append(it.next());
+    }
+}
+
+const QList<QRegExp>& Config::ignoreResourceRegExpList() const
+{
+    return m_ignoreResourceRegexList;
+}
+void Config::setIgnoreResourceRegExp(const QString &pipeDelimitedString)
+{
+    QStringList regexStrList = pipeDelimitedString.split("|");
+    QStringListIterator it(regexStrList);
+    while (it.hasNext()) {
+        QRegExp rx(it.next());
+        rx.setPatternSyntax(QRegExp::Wildcard);
+        m_ignoreResourceRegexList.append(rx);
     }
 }
 

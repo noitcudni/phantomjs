@@ -34,6 +34,9 @@
 #include <QString>
 #include <QStringList>
 #include <QNetworkProxy>
+#include <QList>
+#include <QRegExp>
+
 
 class Config: QObject
 {
@@ -123,6 +126,9 @@ public:
     bool helpFlag() const;
     void setHelpFlag(const bool value);
 
+    void setIgnoreResourceRegExp(const QString &pipeDelimitedString);
+    const QList<QRegExp>& ignoreResourceRegExpList() const;
+
 private:
     void resetToDefaults();
     void setProxyHost(const QString &value);
@@ -143,6 +149,7 @@ private:
     QString m_proxyAuthUser;
     QString m_proxyAuthPass;
     QStringList m_scriptArgs;
+    QList<QRegExp> m_ignoreResourceRegexList;
     QString m_scriptEncoding;
     QString m_scriptFile;
     QString m_unknownOption;

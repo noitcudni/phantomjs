@@ -36,6 +36,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QSet>
+#include <QList>
+#include <QRegExp>
 
 class Config;
 class QNetworkDiskCache;
@@ -71,6 +73,7 @@ private:
     int m_idCounter;
     QNetworkDiskCache* m_networkDiskCache;
     QVariantMap m_customHeaders;
+    QList<QRegExp> m_ignoreResourceRegexList;
 };
 
 #endif // NETWORKACCESSMANAGER_H
