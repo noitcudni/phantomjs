@@ -90,9 +90,9 @@ static void *callback(mg_event event,
     }
 }
 
-WebServer::WebServer(Config *config)
-//: REPLCompletable(parent)
-        : m_config(config)
+WebServer::WebServer(QObject *parent, Config *config)
+        : REPLCompletable(parent)
+        ,m_config(config)
         , m_ctx(0)
 {
     setObjectName("WebServer");
@@ -264,7 +264,6 @@ bool WebServer::handleRequest(mg_event event, mg_connection *conn, const mg_requ
 
 void WebServer::initCompletions()
 {
-/*
     // Add completion for the Dynamic Properties of the 'webpage' object
     // properties
     addCompletion("clipRect");
@@ -273,7 +272,6 @@ void WebServer::initCompletions()
     addCompletion("close");
     // callbacks
     addCompletion("onNewRequest");
-*/
 }
 
 

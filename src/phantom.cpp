@@ -224,13 +224,14 @@ QObject *Phantom::createWebPage()
     if (m_config.debug()) {
       page->showInspector(m_config.remoteDebugPort());
     }
+    page->moveToThread(thread());
 
     return page;
 }
 
 QObject* Phantom::createWebServer()
 {
-    WebServer *server = new WebServer(&m_config);
+    WebServer *server = new WebServer(this, &m_config);
     server->moveToThread(thread());
     m_servers.append(server);
 

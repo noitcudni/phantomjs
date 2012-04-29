@@ -50,14 +50,13 @@ class WebServerResponse;
  *
  * see also: modules/webserver.js
  */
-class WebServer : public QObject
+class WebServer : public REPLCompletable
 {
     Q_OBJECT
     Q_PROPERTY(QString port READ port)
 
 public:
-    //WebServer(QObject *parent, Config *config);
-    WebServer(Config *config);
+    WebServer(QObject *parent, Config *config);
     virtual ~WebServer();
 
 public slots:
