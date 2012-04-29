@@ -35,6 +35,7 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QWebPage>
+#include <QThread>
 
 #include "consts.h"
 #include "terminal.h"
@@ -215,6 +216,7 @@ QObject *Phantom::page() const
 QObject *Phantom::createWebPage()
 {
     WebPage *page = new WebPage(this, &m_config);
+
     m_pages.append(page);
     page->applySettings(m_defaultPageSettings);
     page->setLibraryPath(QFileInfo(m_config.scriptFile()).dir().absolutePath());
@@ -228,8 +230,10 @@ QObject *Phantom::createWebPage()
 
 QObject* Phantom::createWebServer()
 {
-    WebServer *server = new WebServer(this, &m_config);
+    WebServer *server = new WebServer(&m_config);
+    server->moveToThread(thread());
     m_servers.append(server);
+
     ///TODO:
 //     page->applySettings(m_defaultPageSettings);
 //     page->setLibraryPath(QFileInfo(m_config.scriptFile()).dir().absolutePath());

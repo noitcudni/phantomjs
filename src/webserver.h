@@ -34,6 +34,7 @@
 #include <QVariantMap>
 #include <QMutex>
 #include <QSemaphore>
+#include <QObject>
 
 ///TODO: is this ok, or should it be put into .cpp
 ///      can be done by introducing a WebServerPrivate *d;
@@ -49,13 +50,14 @@ class WebServerResponse;
  *
  * see also: modules/webserver.js
  */
-class WebServer : public REPLCompletable
+class WebServer : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString port READ port)
 
 public:
-    WebServer(QObject *parent, Config *config);
+    //WebServer(QObject *parent, Config *config);
+    WebServer(Config *config);
     virtual ~WebServer();
 
 public slots:
