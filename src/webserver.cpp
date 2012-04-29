@@ -177,6 +177,7 @@ bool WebServer::handleRequest(mg_event event, mg_connection *conn, const mg_requ
     if (request->query_string)
         uri.append('?').append(QByteArray(request->query_string));
     requestObject["url"] = uri.data();
+    requestObject["listeningPort"] = m_port;
 
 #if 0
     // Non-standard and thus disable for the time being.
