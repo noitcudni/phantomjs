@@ -429,7 +429,7 @@ static const char *config_options[] = {
   "p", "listening_ports", "8080",
   "r", "document_root",  ".",
   "s", "ssl_certificate", NULL,
-  "t", "num_threads", "10",
+  "t", "num_threads", "1",
   "u", "run_as_user", NULL,
   NULL
 };
@@ -3751,7 +3751,7 @@ static void handle_proxy_request(struct mg_connection *conn) {
     }
     conn->peer->client.is_ssl = is_ssl;
   }
-  
+
   // Forward client's request to the target
   mg_printf(conn->peer, "%s %s HTTP/%s\r\n", ri->request_method, ri->uri + len,
             ri->http_version);

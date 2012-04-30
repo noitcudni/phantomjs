@@ -39,7 +39,6 @@
 #include "config.h"
 #include "cookiejar.h"
 #include "networkaccessmanager.h"
-//#include "terminal.h" //xxx
 
 static const char *toString(QNetworkAccessManager::Operation op)
 {
@@ -123,6 +122,7 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
     // If the url matches one of the ignore resource regular
     // expressions, load about:blank instead to avoid fetching the
     // actual resource.
+    bool skip = false;
     QList<QRegExp>::const_iterator iter = m_ignoreResourceRegexList.begin();
     QList<QRegExp>::const_iterator end_iter = m_ignoreResourceRegexList.end();
     for (; iter != end_iter; ++iter) {
@@ -130,12 +130,10 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
             //Terminal::instance()->cout(QString("(lih) regex >> %1").arg(url.data()));
             QUrl qurl("about:blank");
             req.setUrl(qurl);
+            skip = true;
             break;
         }
     }
-
-
-    //Terminal::instance()->cout(QString("(lih)>> %1").arg(url.data())); //xxxx
 
     // http://code.google.com/p/phantomjs/issues/detail?id=337
     if (op == QNetworkAccessManager::PostOperation) {
@@ -158,7 +156,6 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
         reply->ignoreSslErrors();
     }
 
-
     QVariantList headers;
     foreach (QByteArray headerName, req.rawHeaderList()) {
         QVariantMap header;
@@ -167,19 +164,20 @@ QNetworkReply *NetworkAccessManager::createRequest(Operation op, const QNetworkR
         headers += header;
     }
 
-    m_idCounter++;
-    m_ids[reply] = m_idCounter;
 
-    QVariantMap data;
-    data["id"] = m_idCounter;
-    data["url"] = url.data();
-    data["method"] = toString(op);
-    data["headers"] = headers;
-    data["time"] = QDateTime::currentDateTime();
+    if (!skip) {
+        m_idCounter++;
+        m_ids[reply] = m_idCounter;
+        QVariantMap data;
+        data["id"] = m_idCounter;
+        data["url"] = url.data();
+        data["method"] = toString(op);
+        data["headers"] = headers;
+        data["time"] = QDateTime::currentDateTime();
 
-    connect(reply, SIGNAL(readyRead()), this, SLOT(handleStarted()));
-
-    emit resourceRequested(data);
+        connect(reply, SIGNAL(readyRead()), this, SLOT(handleStarted()));
+        emit resourceRequested(data);
+    }
     return reply;
 }
 

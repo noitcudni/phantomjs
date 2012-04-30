@@ -151,8 +151,10 @@ void Phantom::setOutputEncoding(const QString &encoding)
 
 bool Phantom::execute()
 {
-    if (m_terminated)
+    Terminal::instance()->cout("phantom :: executing.."); //xxx
+    if (m_terminated) {
         return false;
+    }
 
     if (m_config.scriptFile().isEmpty()) {
         // REPL mode requested
@@ -160,6 +162,7 @@ bool Phantom::execute()
         REPL::getInstance(m_page->mainFrame(), this);
     } else {
         // Load the User Script
+
         if (m_config.debug()) {
             // Debug enabled
             if (!Utils::loadJSForDebug(m_config.scriptFile(), m_scriptFileEnc, QDir::currentPath(), m_page->mainFrame(), m_config.remoteDebugAutorun())) {
@@ -224,15 +227,14 @@ QObject *Phantom::createWebPage()
     if (m_config.debug()) {
       page->showInspector(m_config.remoteDebugPort());
     }
-    page->moveToThread(thread());
 
     return page;
 }
 
 QObject* Phantom::createWebServer()
 {
+    Terminal::instance()->cout("createWebServer");
     WebServer *server = new WebServer(this, &m_config);
-    server->moveToThread(thread());
     m_servers.append(server);
 
     ///TODO:
@@ -285,6 +287,7 @@ bool Phantom::injectJs(const QString &jsFilePath)
 
 void Phantom::exit(int code)
 {
+    Terminal::instance()->cout("phantom :: exit."); //xxx
     if (m_config.debug()) {
         Terminal::instance()->cout("Phantom::exit() called but not quitting in debug mode.");
     } else {
