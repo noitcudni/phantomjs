@@ -1,3 +1,7 @@
+<div style="background-color:#F1F4F6; border: 1px solid #DEE4EC; width: 80%; margin: 15px auto; padding: 10px;">
+This fork of PhantomJS was developed specifically for <a href="http://packershack.com">PackerShack.com</a>, a hostel aggregator. I needed a way for phantomjs to ignore a specific set of resources (for instance, css, js, png, gif, etc.) in order to speed up scraping. With this fork, one can tell phantomjs to ignore resources by passing in a set of regular expressions. For example, --ignore-resources=".*?.css|.*?.png".
+</div>
+
 # [PhantomJS](http://phantomjs.org) - Scriptable Headless WebKit
 
 PhantomJS ([www.phantomjs.org](http://phantomjs.org)) is a headless WebKit scriptable with JavaScript or CoffeeScript. It is used by hundreds of [developers](http://code.google.com/p/phantomjs/wiki/ExternalArticles) and dozens of [organizations](http://code.google.com/p/phantomjs/wiki/WhoUsesPhantomJS) for web-related development workflow.
